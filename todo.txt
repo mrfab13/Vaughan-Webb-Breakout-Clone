@@ -1,0 +1,5 @@
+base
+5 layers of diffrent color bricks 10 across
+space to launch ball at random within 90 degrees
+ball dies spawn ontop of the player that launched
+100 points per block in score
