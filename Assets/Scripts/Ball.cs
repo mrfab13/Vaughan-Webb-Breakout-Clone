@@ -10,9 +10,13 @@ public class Ball : NetworkBehaviour
     public float Speed = 30;
     public Rigidbody2D RigidbodyRef;
     public bool CollideWithTeammate = true;
+    public bool assigned = false;
+
+
+
 
     public enum BallState
-    { 
+    {
         NONE,
         IDLE,
         DEAD,
@@ -21,26 +25,21 @@ public class Ball : NetworkBehaviour
     public BallState CurrentState = BallState.IDLE;
 
 
+    private void FixedUpdate()
+    {
+        RigidbodyRef.velocity = Vector2.ClampMagnitude(RigidbodyRef.velocity, 30.0f);
+    }
+
+
     void OnCollisionEnter2D(Collision2D Collider)
     {
         //if the ball hits the player
         if (Collider.transform.GetComponent<Player>() && CurrentState == BallState.MOVING)
         {
-            //calculates angle to reflect the ball
-            float X = (transform.position.x - Collider.transform.position.x) / Collider.collider.bounds.size.x;
-
-            //vertical component
-            float Y = 1;
-            if (CollideWithTeammate)
-            {
-                Y = Collider.relativeVelocity.y > 0 ? 1 : -1;
-            }
-
-            //Calculate direction
-            Vector2 Dir = new Vector2(X, Y).normalized;
-
-            // Set Velocity with dir * speed
-            RigidbodyRef.velocity = Dir * Speed;
+            float offsetFromPaddle = Collider.transform.position.x - transform.position.x;
+            float angularStrength = offsetFromPaddle / Collider.collider.bounds.size.x;
+            float bounceAngle = Mathf.Clamp(-45.0f * angularStrength * Mathf.Deg2Rad, -0.45f, 0.45f) ;
+            RigidbodyRef.velocity = Vector2.ClampMagnitude(new Vector2(Mathf.Sin(bounceAngle), Mathf.Cos(bounceAngle)), 1.0f) * Speed;
         }
     }
 }

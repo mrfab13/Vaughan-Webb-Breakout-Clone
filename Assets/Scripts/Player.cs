@@ -10,24 +10,19 @@ public class Player : NetworkBehaviour
     public Rigidbody2D RigidbodyRef;
     public Ball BallRef;
 
-    void FixedUpdate()
+    void Start()
+    {
+        //BallRef = PrefBall.GetComponent<Ball>();
+    }
+
+    void Update()
     {
         //you can only control your own player
         if (!isLocalPlayer)
         {
             return;
         }
-
-        //paddle horizontal movment
-        RigidbodyRef.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), 0) * Speed * Time.fixedDeltaTime;
-
-        //follow the paddle
-        if (BallRef.CurrentState == Ball.BallState.IDLE)
-        {
-            BallRef.transform.position = this.gameObject.transform.position + new Vector3(0.0f, 3.0f, 0.0f);
-        }
-
-
+        
         //player interact button
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -43,7 +38,7 @@ public class Player : NetworkBehaviour
                         //Launch the ball
                         BallRef.RigidbodyRef.simulated = true;
                         BallRef.CurrentState = Ball.BallState.MOVING;
-                        BallRef.RigidbodyRef.velocity = Vector2.up * BallRef.Speed;
+                        BallRef.RigidbodyRef.AddForce(Vector2.up * BallRef.Speed, ForceMode2D.Impulse);
 
                         Debug.Log("PEW");
                         break;
@@ -65,7 +60,23 @@ public class Player : NetworkBehaviour
                     }
             }
         }
+    }
 
+    void FixedUpdate()
+    {
+        //you can only control your own player
+        if (!isLocalPlayer)
+        {
+            return;
+        }
 
+        //paddle horizontal movment
+        RigidbodyRef.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), 0) * Speed * Time.fixedDeltaTime;
+
+        //follow the paddle
+        if (BallRef.CurrentState == Ball.BallState.IDLE)
+        {
+            BallRef.transform.position = this.gameObject.transform.position + new Vector3(0.0f, 3.0f, 0.0f);
+        }
     }
 }
