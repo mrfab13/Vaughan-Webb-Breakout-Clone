@@ -12,7 +12,26 @@ public class Player : NetworkBehaviour
 
     void Start()
     {
+
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
         //BallRef = PrefBall.GetComponent<Ball>();
+        GameObject[] gameObjects;
+        gameObjects = GameObject.FindGameObjectsWithTag("Ball");
+
+
+        for (int i = 0; i < gameObjects.Length; i++)
+        {
+            if (gameObjects[i].GetComponent<Ball>().IsAssigned == false)
+            {
+                Debug.Log(i);
+                BallRef = gameObjects[i].GetComponent<Ball>();
+                gameObjects[i].GetComponent<Ball>().IsAssigned = true;
+            }
+        }
     }
 
     void Update()
@@ -74,9 +93,11 @@ public class Player : NetworkBehaviour
         RigidbodyRef.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), 0) * Speed * Time.fixedDeltaTime;
 
         //follow the paddle
+
         if (BallRef.CurrentState == Ball.BallState.IDLE)
         {
-            BallRef.transform.position = this.gameObject.transform.position + new Vector3(0.0f, 3.0f, 0.0f);
+            BallRef.transform.position = gameObject.transform.position + new Vector3(0.0f, 3.0f, 0.0f);
+            Debug.Log(BallRef.transform.position + " " + gameObject.transform.position + new Vector3(0.0f, 3.0f, 0.0f));
         }
     }
 }

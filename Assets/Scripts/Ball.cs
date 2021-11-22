@@ -10,7 +10,7 @@ public class Ball : NetworkBehaviour
     public float Speed = 30;
     public Rigidbody2D RigidbodyRef;
     public bool CollideWithTeammate = true;
-    public bool assigned = false;
+    public bool IsAssigned = false;
 
 
 

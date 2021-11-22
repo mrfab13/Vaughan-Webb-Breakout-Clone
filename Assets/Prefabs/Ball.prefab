@@ -53,6 +53,7 @@ MonoBehaviour:
   Speed: 30
   RigidbodyRef: {fileID: -4446686941093372319}
   CollideWithTeammate: 1
+  IsAssigned: 0
   CurrentState: 1
 --- !u!114 &7999886460394805055
 MonoBehaviour:
@@ -85,7 +86,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0
-  clientAuthority: 0
+  clientAuthority: 1
   sendInterval: 0.05
   syncPosition: 1
   syncRotation: 0

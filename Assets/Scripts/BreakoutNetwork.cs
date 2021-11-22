@@ -19,7 +19,7 @@ public class BreakoutNetwork: NetworkManager
 
         PrefBall = Instantiate(spawnPrefabs.Find(prefab => prefab.name == "Ball"));
 
-        NetworkServer.Spawn(PrefBall);
+        NetworkServer.Spawn(PrefBall, conn);
 
 
     }
