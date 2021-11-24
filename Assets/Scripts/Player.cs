@@ -9,92 +9,63 @@ public class Player : NetworkBehaviour
     public float Speed = 30;
     public Rigidbody2D RigidbodyRef;
     public Ball BallRef;
+    [SerializeField] private Vector3 BallFollowSpace = new Vector3(0.0f, 3.0f, 1.0f);
+    [SerializeField] private Vector2 LaunchAngleMinMax = new Vector2(-45.0f, 45.0f);
 
     void Start()
     {
-
+        //Only assign to yourself
         if (!isLocalPlayer)
         {
             return;
         }
 
-        //BallRef = PrefBall.GetComponent<Ball>();
-        GameObject[] gameObjects;
-        gameObjects = GameObject.FindGameObjectsWithTag("Ball");
-        
-
-        for (int i = 0; i < gameObjects.Length; i++)
+        //Assign created ball to yourself
+        GameObject[] Balls;
+        Balls = GameObject.FindGameObjectsWithTag("Ball");
+        for (int i = 0; i < Balls.Length; i++)
         {
-            if (gameObjects[i].GetComponent<Ball>().IsAssigned == false)
+            if (Balls[i].GetComponent<Ball>().IsAssigned == false)
             {
-                Debug.Log(i);
-                BallRef = gameObjects[i].GetComponent<Ball>();
-                gameObjects[i].GetComponent<Ball>().IsAssigned = true;
+                BallRef = Balls[i].GetComponent<Ball>();
+                Balls[i].GetComponent<Ball>().IsAssigned = true;
             }
         }
     }
 
     void Update()
     {
-        //you can only control your own player
+        //You can only Launch your own ball
         if (!isLocalPlayer)
         {
             return;
         }
         
-        //player interact button
-        if (Input.GetKeyDown(KeyCode.Space))
+        //Launch the ball when player presses space if ball is idle
+        if ((Input.GetKeyDown(KeyCode.Space)) && (BallRef.CurrentState == Ball.BallState.IDLE))
         {
-            switch (BallRef.CurrentState)
-            {
-                case Ball.BallState.NONE:
-                    {
-                        Debug.LogWarning("Ball State Not Set");
-                        break;
-                    }
-                case Ball.BallState.IDLE:
-                    {
-                        //Launch the ball
-                        BallRef.RigidbodyRef.simulated = true;
-                        BallRef.CurrentState = Ball.BallState.MOVING;
-                        float bounceAngle = Random.Range(-45.0f, 45.0f) * Mathf.Deg2Rad;
-                        BallRef.RigidbodyRef.AddForce(new Vector2(Mathf.Sin(bounceAngle), Mathf.Cos(bounceAngle)) * BallRef.Speed, ForceMode2D.Impulse);
-
-                        Debug.Log("PEW");
-                        break;
-                    }
-                case Ball.BallState.MOVING:
-                    {
-                        //speed boost if neer paddle?
-                        break;
-                    }
-                default:
-                    {
-                        Debug.LogWarning("Ball State Not Set");
-                        break;
-                    }
-            }
+            BallRef.RigidbodyRef.simulated = true;
+            BallRef.CurrentState = Ball.BallState.MOVING;
+            float BounceAngle = Random.Range(LaunchAngleMinMax.x, LaunchAngleMinMax.y) * Mathf.Deg2Rad;
+            BallRef.RigidbodyRef.AddForce(new Vector2(Mathf.Sin(BounceAngle), Mathf.Cos(BounceAngle)) * BallRef.Speed, ForceMode2D.Impulse);
         }
     }
 
     void FixedUpdate()
     {
-        //you can only control your own player
+        //You can only control your own player
         if (!isLocalPlayer)
         {
             return;
         }
 
-        //paddle horizontal movment
+        //Handles movement
         RigidbodyRef.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), 0) * Speed * Time.fixedDeltaTime;
 
-        //follow the paddle
-
+        //Ball follows the paddle if in idle state
         if (BallRef.CurrentState == Ball.BallState.IDLE)
         {
-            BallRef.transform.position = gameObject.transform.position + new Vector3(0.0f, 3.0f, 0.0f);
+            BallRef.transform.position = gameObject.transform.position + BallFollowSpace;
         }
     }
-
-
 }

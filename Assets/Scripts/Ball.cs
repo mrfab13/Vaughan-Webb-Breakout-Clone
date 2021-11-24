@@ -6,14 +6,10 @@ using Mirror;
 
 public class Ball : NetworkBehaviour
 {
-
     public float Speed = 30;
     public Rigidbody2D RigidbodyRef;
-    public bool CollideWithTeammate = true;
     public bool IsAssigned = false;
-
-
-
+    [SerializeField] private Vector2 PaddleAngleMinMax = new Vector2(-0.45f, 0.45f);
 
     public enum BallState
     {
@@ -25,29 +21,30 @@ public class Ball : NetworkBehaviour
     [SyncVar]
     public BallState CurrentState = BallState.IDLE;
 
-
-    private void FixedUpdate()
+    //Makes sure the speed doesnt excede max 
+    void FixedUpdate()
     {
         RigidbodyRef.velocity = Vector2.ClampMagnitude(RigidbodyRef.velocity, Speed);
     }
 
-
+    //Ball collision handler
     void OnCollisionEnter2D(Collision2D Collider)
     {
-        //if the ball hits the player
+        //Reflects the ball at calculated angle based upon where the collision happens on the paddle
         if (Collider.gameObject.CompareTag("Player") && CurrentState == BallState.MOVING)
         {
-            float offsetFromPaddle = Collider.transform.position.x - transform.position.x;
-            float angularStrength = offsetFromPaddle / Collider.collider.bounds.size.x;
-            float bounceAngle = Mathf.Clamp(-45.0f * angularStrength * Mathf.Deg2Rad, -0.45f, 0.45f);
-            RigidbodyRef.velocity = Vector2.ClampMagnitude(new Vector2(Mathf.Sin(bounceAngle), Mathf.Cos(bounceAngle)), 1.0f) * Speed;
+            float OffsetFromPaddle = Collider.transform.position.x - transform.position.x;
+            float AngularStrength = OffsetFromPaddle / Collider.collider.bounds.size.x;
+            float BounceAngle = Mathf.Clamp(-45.0f * AngularStrength * Mathf.Deg2Rad, PaddleAngleMinMax.x, PaddleAngleMinMax.y);
+            RigidbodyRef.velocity = Vector2.ClampMagnitude(new Vector2(Mathf.Sin(BounceAngle), Mathf.Cos(BounceAngle)), 1.0f) * Speed;
         }
-        else if (Collider.gameObject.CompareTag("Brick"))
+        else if (Collider.gameObject.CompareTag("Brick")) //Deals 1 damage to brick upon collisions
         {
             Collider.transform.GetComponent<Brick>().HP -= 1;
         }
-        else if (Collider.gameObject.CompareTag("KillWall"))
+        else if (Collider.gameObject.CompareTag("KillWall")) //Resets the ball upon leavign the map
         {
+            RigidbodyRef.simulated = false;
             CurrentState = BallState.IDLE;
         }
     }

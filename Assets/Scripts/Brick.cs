@@ -5,7 +5,7 @@ using Mirror;
 
 public class Brick : NetworkBehaviour
 {
-    private int _HP = 1;
+    [SerializeField] private int _HP = 1;
     public int HP
     {
         get { return _HP; }
@@ -18,11 +18,13 @@ public class Brick : NetworkBehaviour
 
             if (value <= 0)
             {
+                //Brick hp is less then 1 call the fucntion to destroy
                 CmdDestroy();
             }
         }
     }
 
+    //Sends Network command to destroy the brick and update the total
     [Command(requiresAuthority = false)]
     void CmdDestroy()
     {
