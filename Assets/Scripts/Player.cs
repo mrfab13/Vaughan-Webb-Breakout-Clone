@@ -57,7 +57,8 @@ public class Player : NetworkBehaviour
                         //Launch the ball
                         BallRef.RigidbodyRef.simulated = true;
                         BallRef.CurrentState = Ball.BallState.MOVING;
-                        BallRef.RigidbodyRef.AddForce(Vector2.up * BallRef.Speed, ForceMode2D.Impulse);
+                        float bounceAngle = Random.Range(-45.0f, 45.0f) * Mathf.Deg2Rad;
+                        BallRef.RigidbodyRef.AddForce(new Vector2(Mathf.Sin(bounceAngle), Mathf.Cos(bounceAngle)) * BallRef.Speed, ForceMode2D.Impulse);
 
                         Debug.Log("PEW");
                         break;
@@ -97,7 +98,6 @@ public class Player : NetworkBehaviour
         if (BallRef.CurrentState == Ball.BallState.IDLE)
         {
             BallRef.transform.position = gameObject.transform.position + new Vector3(0.0f, 3.0f, 0.0f);
-            Debug.Log(BallRef.transform.position + " " + gameObject.transform.position + new Vector3(0.0f, 3.0f, 0.0f));
         }
     }
 }

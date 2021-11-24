@@ -38,8 +38,12 @@ public class Ball : NetworkBehaviour
         {
             float offsetFromPaddle = Collider.transform.position.x - transform.position.x;
             float angularStrength = offsetFromPaddle / Collider.collider.bounds.size.x;
-            float bounceAngle = Mathf.Clamp(-45.0f * angularStrength * Mathf.Deg2Rad, -0.45f, 0.45f) ;
+            float bounceAngle = Mathf.Clamp(-45.0f * angularStrength * Mathf.Deg2Rad, -0.45f, 0.45f);
             RigidbodyRef.velocity = Vector2.ClampMagnitude(new Vector2(Mathf.Sin(bounceAngle), Mathf.Cos(bounceAngle)), 1.0f) * Speed;
+        }
+        else if (Collider.transform.GetComponent<Brick>())
+        {
+            Collider.transform.GetComponent<Brick>().HP -= 1;
         }
     }
 }
