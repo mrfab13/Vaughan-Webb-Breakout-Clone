@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-
 public class Ball : NetworkBehaviour
 {
     public float Speed = 30;
