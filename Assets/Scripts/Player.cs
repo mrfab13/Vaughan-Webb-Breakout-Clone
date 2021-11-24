@@ -12,6 +12,8 @@ public class Player : NetworkBehaviour
     [SerializeField] private Vector3 BallFollowSpace = new Vector3(0.0f, 3.0f, 1.0f);
     [SerializeField] private Vector2 LaunchAngleMinMax = new Vector2(-45.0f, 45.0f);
 
+    [SerializeField] private GameObject MenuCam;
+
     void Start()
     {
         //Only assign to yourself
@@ -19,6 +21,10 @@ public class Player : NetworkBehaviour
         {
             return;
         }
+
+        //Disable menu graphic upon spawn
+        MenuCam = GameObject.Find("Menu Camera");
+        MenuCam.SetActive(false);
 
         //Assign created ball to yourself
         GameObject[] Balls;
@@ -31,6 +37,17 @@ public class Player : NetworkBehaviour
                 Balls[i].GetComponent<Ball>().IsAssigned = true;
             }
         }
+    }
+
+    //Enable the main menu graphic upon leaving
+    void OnDestroy()
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        MenuCam.SetActive(true);
     }
 
     void Update()

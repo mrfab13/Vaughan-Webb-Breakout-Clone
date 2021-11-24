@@ -9,6 +9,7 @@ public class BreakoutNetwork: NetworkManager
     public Transform P2SpawnPos;
     private GameObject PrefBall;
 
+
     //Fully override the code for when a new player connects to the server
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
