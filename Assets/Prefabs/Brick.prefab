@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1832088987199426784}
   m_Layer: 0
   m_Name: Brick
-  m_TagString: Player
+  m_TagString: Brick
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 5969260387549776213}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.4653, y: 1.663125, z: 1}
+  m_LocalScale: {x: 3, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -64,7 +64,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 
+  m_AssetId: 9ebddbb5384e8fd4d92d24d471aa49ff
   hasSpawned: 0
 --- !u!114 &8387816294437424549
 MonoBehaviour:

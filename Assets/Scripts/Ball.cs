@@ -19,31 +19,36 @@ public class Ball : NetworkBehaviour
     {
         NONE,
         IDLE,
-        DEAD,
         MOVING,
     };
+
+    [SyncVar]
     public BallState CurrentState = BallState.IDLE;
 
 
     private void FixedUpdate()
     {
-        RigidbodyRef.velocity = Vector2.ClampMagnitude(RigidbodyRef.velocity, 30.0f);
+        RigidbodyRef.velocity = Vector2.ClampMagnitude(RigidbodyRef.velocity, Speed);
     }
 
 
     void OnCollisionEnter2D(Collision2D Collider)
     {
         //if the ball hits the player
-        if (Collider.transform.GetComponent<Player>() && CurrentState == BallState.MOVING)
+        if (Collider.gameObject.CompareTag("Player") && CurrentState == BallState.MOVING)
         {
             float offsetFromPaddle = Collider.transform.position.x - transform.position.x;
             float angularStrength = offsetFromPaddle / Collider.collider.bounds.size.x;
             float bounceAngle = Mathf.Clamp(-45.0f * angularStrength * Mathf.Deg2Rad, -0.45f, 0.45f);
             RigidbodyRef.velocity = Vector2.ClampMagnitude(new Vector2(Mathf.Sin(bounceAngle), Mathf.Cos(bounceAngle)), 1.0f) * Speed;
         }
-        else if (Collider.transform.GetComponent<Brick>())
+        else if (Collider.gameObject.CompareTag("Brick"))
         {
             Collider.transform.GetComponent<Brick>().HP -= 1;
+        }
+        else if (Collider.gameObject.CompareTag("KillWall"))
+        {
+            CurrentState = BallState.IDLE;
         }
     }
 }

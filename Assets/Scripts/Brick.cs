@@ -27,7 +27,6 @@ public class Brick : NetworkBehaviour
     void CmdDestroy()
     {
         GameObject.Find("Canvas").gameObject.GetComponent<UIManager>().Score += 100;
-
         NetworkServer.Destroy(this.gameObject);
     }
 }

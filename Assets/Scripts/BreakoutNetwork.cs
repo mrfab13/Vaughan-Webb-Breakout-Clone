@@ -31,7 +31,18 @@ public class BreakoutNetwork: NetworkManager
             NetworkServer.Destroy(PrefBall);
         }
 
+
+
         // call base functionality (actually destroys the player)
         base.OnServerDisconnect(conn);
     }
+
+    public override void OnStopHost()
+    {
+        Destroy(this.gameObject);
+
+        base.OnStopHost();
+    }
+
+
 }

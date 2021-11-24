@@ -7,6 +7,7 @@ TagManager:
   - Ball
   - Brick
   - Wall
+  - KillWall
   layers:
   - Default
   - TransparentFX

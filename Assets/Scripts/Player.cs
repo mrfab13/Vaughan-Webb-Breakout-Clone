@@ -21,7 +21,7 @@ public class Player : NetworkBehaviour
         //BallRef = PrefBall.GetComponent<Ball>();
         GameObject[] gameObjects;
         gameObjects = GameObject.FindGameObjectsWithTag("Ball");
-
+        
 
         for (int i = 0; i < gameObjects.Length; i++)
         {
@@ -63,11 +63,6 @@ public class Player : NetworkBehaviour
                         Debug.Log("PEW");
                         break;
                     }
-                case Ball.BallState.DEAD:
-                    {
-                        //respawn the ball
-                        break;
-                    }
                 case Ball.BallState.MOVING:
                     {
                         //speed boost if neer paddle?
@@ -100,4 +95,6 @@ public class Player : NetworkBehaviour
             BallRef.transform.position = gameObject.transform.position + new Vector3(0.0f, 3.0f, 0.0f);
         }
     }
+
+
 }
